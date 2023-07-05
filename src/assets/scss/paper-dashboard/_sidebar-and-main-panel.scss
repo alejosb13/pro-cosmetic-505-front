@@ -163,11 +163,13 @@
 
         a.logo-mini{
             opacity: 1;
-            float: left;
-            width: 49px;
+            /* float: left; */
+            max-width: 140px;
+            width: 100%;
             text-align: center;
-            margin-left: 4px;
-            margin-right: 12px;
+            /* margin-left: 4px; */
+            margin: 0px auto;
+            /* margin-right: 8px; */
         }
 
         a.logo-normal{
