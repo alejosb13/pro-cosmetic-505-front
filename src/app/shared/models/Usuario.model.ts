@@ -1,6 +1,7 @@
 import { Cliente } from "./Cliente.model";
 import { Factura } from "./Factura.model";
 import { Meta } from "./Meta.model";
+import { Producto } from "./Producto.model";
 import { Recibo } from "./Recibo.model";
 import { ReciboHistorial } from './ReciboHistorial.model';
 
@@ -33,3 +34,12 @@ export interface UsuarioServ { // se usa para insertar o modificar
   role: number;
 }
 
+export interface UsuarioProductos { // se usa para insertar o modificar
+  cantidad_total: number
+  cliente_id: number
+  producto_id: number
+  user_id: number
+  cliente?: Cliente
+  usuario?: Usuario
+  producto?: Producto
+}

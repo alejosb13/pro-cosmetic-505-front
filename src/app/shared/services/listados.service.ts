@@ -9,6 +9,7 @@ import { ReciboHistorial } from "../models/ReciboHistorial.model";
 import { Abono } from "../models/Abono.model";
 import { Cliente } from "../models/Cliente.model";
 import { FacturaDetalle } from "../models/FacturaDetalle.model";
+import { UsuarioProductos } from "../models/Usuario.model";
 
 const ListadoURL = `${environment.urlAPI}list`;
 
@@ -199,11 +200,62 @@ export class Listado {
     });
   }
 
+  productoUsuarioList(
+    options: FiltrosList
+  ): Observable<ListadoModel<UsuarioProductos>> {
+    // console.log("FiltrosList", options);
+    let URL: string;
+
+    if (options.link) {
+      URL = this.urlParams(options.link, options);
+    } else {
+      URL = `${ListadoURL}/producto-vendedor`;
+
+      if (Object.keys(options).length > 0) {
+        // let URLOptions = `${ListadoURL}/facturas?`
+
+        URL = this.urlParams(URL, options);
+
+        // URL = URLOptions
+      }
+    }
+
+    // console.log(URL);
+
+    return this.http.get<ListadoModel<UsuarioProductos>>(URL, {
+      headers: this.headerJson_Token(),
+      responseType: "json",
+    });
+  }
+
   registerClientesPDF(
     options: any
   ) {
     // console.log("FiltrosList", options);
     let URL = `${environment.urlAPI}pdf/registroclientes`;
+
+    if (Object.keys(options).length > 0) {
+      // let URLOptions = `${ListadoURL}/facturas?`
+      // options.alldate = options.allDates 
+      // delete options.allDates;
+      URL = this.urlParams(URL, options);
+
+      // URL = URLOptions
+    }
+
+    // console.log(URL);
+
+    let headers = new HttpHeaders();
+    headers = headers.set('Accept', 'application/pdf');
+
+    return this.http.get(`${URL}`, { headers: headers, responseType: 'blob' });
+  }
+
+  productosVendidosPDF(
+    options: any
+  ) {
+    // console.log("FiltrosList", options);
+    let URL = `${environment.urlAPI}pdf/productos_vendedor`;
 
     if (Object.keys(options).length > 0) {
       // let URLOptions = `${ListadoURL}/facturas?`

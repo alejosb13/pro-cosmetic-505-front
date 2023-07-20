@@ -1,0 +1,235 @@
+<div class="bg-white">
+  <div *ngIf="isLoad" class="container-fluid p-5">
+    <div class="d-flex justify-content-center align-content-center">
+      <span>
+        Cargando clientes
+        <i class="fas fa-circle-notch fa-spin"></i>
+      </span>
+    </div>
+  </div>
+
+  <ng-container *ngIf="!isLoad">
+    <div class="card-header border-0 pt-4 bg-white">
+      <div class="d-flex justify-content-start flex-wrap">
+        <button
+          class="btn btn-primary mr-2"
+          (click)="openFiltros(contentEditar)"
+        >
+          Filtros <i class="fas fa-filter"></i>
+        </button>
+        <a class="btn btn-primary mr-2" routerLink="/cliente/agregar">
+          <i class="fas fa-plus"></i>
+          Agregar
+        </a>
+        <button
+          *ngIf="isSupervisor || isAdmin"
+          class="btn btn-primary mr-2"
+          (click)="descargarPDF()"
+        >
+          <i class="fas fa-file-download fa-lg"></i> Reporte
+        </button>
+      </div>
+      <div class="col-12 p-0">
+        <div class="d-flex flex-row justify-content-between mt-3">
+          <div class="card-title align-items-start flex-column">
+            <span class="d-block fuvi-text-green card-label fw-bolder fs-3 mb-1"
+              >Clientes</span
+            >
+            <span class="fuvi-text-black mt-1 fw-bold fs-5"
+              >Total: {{ listadoData.total }}</span
+            >
+          </div>
+
+          <form class="d-flex align-items-center justify-content-end buscador">
+            <div class="form-label-group input-group">
+              <input
+                type="text"
+                id="inputEmail"
+                class="form-control form-control-sm pt-1"
+                placeholder="Buscar"
+                name="buscar"
+                [(ngModel)]="listadoFilter.filter"
+              />
+              <button
+                class="btn btn-primary my-0"
+                (click)="BuscarValor()"
+                type="button"
+                id="button-addon2"
+              >
+                Buscar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body py-3 px-6 bg-white table-responsive table-full-width">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#Factura</th>
+            <th scope="col">#Producto</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Modelo</th>
+            <th scope="col">Linea</th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Cliente</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="UsuarioProductos.length > 0">
+          <tr *ngFor="let data of UsuarioProductos">
+            <td>
+              <a
+                target="_blank"
+                [routerLink]="['/factura', 'detalle', data.id]"
+                >{{ data.id }}</a
+              >
+            </td>
+            <td>{{ data.producto_id }}</td>
+            <td>{{ data.producto.marca }}</td>
+            <td>{{ data.producto.modelo }}</td>
+            <td>{{ data.producto.linea }}</td>
+            <td>{{ data.producto.descripcion }}</td>
+            <td>{{ data.cantidad_total }}</td>
+            <td>
+              <a
+                target="_blank"
+                [routerLink]="['/cliente', 'estado-cuenta', data.cliente_id]"
+                >{{ data.cliente.nombreCompleto }}</a
+              >
+            </td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="UsuarioProductos.length == 0">
+          <tr>
+            <td colspan="9">
+              <div
+                class="container d-flex align-items-center justify-content-center"
+              >
+                <!-- <div class="alert alert-info w-100 text-center" > -->
+                <h5>No existen datos</h5>
+                <!-- </div> -->
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="d-flex justify-content-between p-2">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li
+              class="page-item"
+              *ngFor="let listado of listadoData.links"
+              (click)="newPage(listado)"
+              [ngClass]="{
+                active: listado.active,
+                disabled: listado.url == null
+              }"
+            >
+              <span class="page-link pointer">
+                <span aria-hidden="true" [innerHTML]="listado.label"></span>
+              </span>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #contentEditar let-modal>
+  <div class="modal-header">
+    <div>
+      <h4 class="modal-title m-0" id="modal-basic-title">Filtros</h4>
+    </div>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="flexCheckDefault"
+            value="true"
+            [(ngModel)]="allDates"
+          />
+          <label class="form-check-label" for="flexCheckDefault"> Todos </label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Desde</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateIni"
+          />
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <p class="font-weight-bold">Hasta</p>
+          <input
+            [disabled]="allDates"
+            type="date"
+            class="form-control"
+            [(ngModel)]="dateFin"
+          />
+        </div>
+      </div>
+      <div class="col-md-6" *ngIf="isAdmin || isSupervisor">
+        <p class="font-weight-bold">Usuarios</p>
+        <select name="" id="" class="form-control" [(ngModel)]="userId">
+          <option value="0">Todos los usuarios</option>
+          <option
+            *ngFor="let usuario of userStore"
+            [selected]="usuario.id == userId"
+            [value]="usuario.id"
+          >
+            {{ usuario.name }} {{ usuario.apellido }}
+          </option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <p class="font-weight-bold">Estado Factura</p>
+        <select name="" id="" class="form-control" [(ngModel)]="status_pagado">
+          <option [selected]="status_pagado == 0" value="0">Sin Pagar</option>
+          <option [selected]="status_pagado == 1" value="1">Pagada</option>
+          <option [selected]="status_pagado == 3" value="3">
+            Pagadas / Sin pagar
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer justify-content-center w-100">
+    <div class="row w-100">
+      <div class="col text-center">
+        <button class="btn btn-danger" (click)="limpiarFiltros()">
+          Limpiar <i class="fas fa-eraser"></i>
+        </button>
+      </div>
+      <div class="col text-center">
+        <button class="btn btn-primary" (click)="aplicarFiltros(true)">
+          Aplicar <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
