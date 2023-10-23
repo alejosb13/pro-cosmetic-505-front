@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Role } from 'app/shared/models/Role.model';
 import { Usuario, UsuarioServ } from 'app/shared/models/Usuario.model';
 import { HelpersService } from 'app/shared/services/helpers.service';
@@ -15,9 +15,9 @@ import Swal from 'sweetalert2';
 })
 export class UsuarioFormComponent implements OnInit {
 
-  editarUsuarioForm: FormGroup;
-  PasswordGroup:FormGroup;
-  EstadoForm: FormGroup;
+  editarUsuarioForm: UntypedFormGroup;
+  PasswordGroup:UntypedFormGroup;
+  EstadoForm: UntypedFormGroup;
   
   Roles:Role[]
   loadInfo:boolean = false;
@@ -26,7 +26,7 @@ export class UsuarioFormComponent implements OnInit {
   @Output() FormsValues = new EventEmitter<UsuarioServ>();
   
   constructor(
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private _RolesService: RolesService,
     public _UsuariosService: UsuariosService,
   ) { 
