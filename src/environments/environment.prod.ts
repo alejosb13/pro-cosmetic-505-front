@@ -1,8 +1,8 @@
 export const environment = {
   production: true,
-  urlAPI: 'https://katrinani-001-site2.ftempurl.com/api/', 
+  urlAPI: 'https://api.procosmetic505.com/api/', 
   appVersion: "1.0",
-  USERDATA_KEY_STORAGE:"KVariedades",
+  USERDATA_KEY_STORAGE:"ProCosmetics",
   CHECKOUT_KEY_STORAGE:"Checkout",
   PageSize: 15,
 };

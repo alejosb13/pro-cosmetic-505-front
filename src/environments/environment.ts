@@ -7,7 +7,7 @@ export const environment = {
   production: false,
   urlAPI: 'http://127.0.0.1:8000/api/', 
   appVersion: "1.0",
-  USERDATA_KEY_STORAGE:"KVariedades",
+  USERDATA_KEY_STORAGE:"ProCosmetics",
   CHECKOUT_KEY_STORAGE:"Checkout",
   PageSize: 15,
 };
